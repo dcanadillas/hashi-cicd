@@ -147,9 +147,9 @@ controller:
               - vaultUsernamePasswordCredentialImpl:
                   engineVersion: 2
                   id: "github_vault"
-                  namespace: "admin"
+                  namespace: "root"
                   passwordKey: "gh_token"
-                  path: "kv/github"
+                  path: "kv/cicd"
                   scope: GLOBAL
                   usernameKey: "gh_user"
               - vaultKubernetesCredential:
@@ -167,23 +167,28 @@ controller:
             configuration:
               engineVersion: 2
               timeout: 60
-              vaultCredentialId: "hcp-vault"
-              vaultUrl: "https://vault.vault:8200"
+              vaultCredentialId: "k8s-vaultdemo"
+              vaultUrl: "http://vault.vault:8200"
           themeManager:
             disableUserThemes: false
-            theme: "material-indigo"
+            theme: "default"
       list-jobs: |-
         jobs:
           - script: >
               folder('HashiCorp')
           - script: >
               multibranchPipelineJob('HashiCorp/vault-tfe-pipeline') {
+                factory {
+                  workflowBranchProjectFactory {
+                    scriptPath('jenkins/Jenkinsfile.vault-tf-vars')
+                  }
+                }
                 branchSources {
                   github {
-                    id('123456789')
-                    scanCredentialsId('github_vault')
+                    id('github-12')
+                    scanCredentialsId(null)
                     repoOwner('dcanadillas')
-                    repository('cicd-pipelines')
+                    repository('hashi-cicd')
                   }
                 }
               }

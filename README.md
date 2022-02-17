@@ -23,7 +23,7 @@ The script is going to ask if you are using the righ K8s context. Press any key 
 > NOTE:
 > *If you want to install every included CI/CD engine (Tekton Pipelines by now):*
 > ```bash
-> make install
+> make install all
 > ```
 
 Change the values of the static secrets to be used in Vault in the file `install/config/secrets.json`:
