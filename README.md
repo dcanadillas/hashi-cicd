@@ -36,8 +36,11 @@ Change the values of the static secrets to be used in Vault in the file `install
   "gh_user": "<gh_token>",
   "gh_token": "<gh_token> "
 }
+```
+
 
 Configure Vault with the required secrets and Kubernetes auth:
+
 ```bash
 make configure TFEORG=<your_TFC_organization> TFEUSER=<your_TFC_user>
 ```
