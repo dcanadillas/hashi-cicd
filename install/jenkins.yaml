@@ -1,0 +1,201 @@
+clusterZone: "cluster.local"
+
+renderHelmLabels: true
+
+controller:
+  # Used for label app.kubernetes.io/component
+  componentName: "jenkins-controller"
+  image: "jenkins/jenkins"
+  tag: "latest-jdk11"
+  tagLabel: jdk11
+  imagePullPolicy: "IfNotPresent"
+  imagePullSecretName:
+  lifecycle:
+  disableRememberMe: false
+  numExecutors: 0
+  # configures the executor mode of the Jenkins node. Possible values are: NORMAL or EXCLUSIVE
+  executorMode: "NORMAL"
+  # This is ignored if enableRawHtmlMarkupFormatter is true
+  markupFormatter: plainText
+  customJenkinsLabels: []
+  # The default configuration uses this secret to configure an admin user
+  # If you don't need that user or use a different security realm then you can disable it
+  adminSecret: true
+  hostNetworking: false
+  adminUser: "dcanadillas"
+  # adminPassword: <defaults to random>
+  admin:
+    existingSecret: "jenkins-admin"
+    userKey: jenkins-admin-user
+    passwordKey: jenkins-admin-password
+  # This values should not be changed unless you use your custom image of jenkins or any devired from. If you want to use
+  # Cloudbees Jenkins Distribution docker, you should set jenkinsHome: "/var/cloudbees-jenkins-distribution"
+  servicePort: 8080
+  targetPort: 8080
+  serviceType: LoadBalancer
+  # Use Local to preserve the client source IP and avoids a second hop for LoadBalancer and Nodeport type services,
+  # but risks potentially imbalanced traffic spreading.
+  serviceExternalTrafficPolicy:
+  serviceAnnotations: {}
+  statefulSetLabels: {}
+  serviceLabels: {}
+  #   service.beta.kubernetes.io/aws-load-balancer-backend-protocol: https
+  podLabels: {}
+  # Used to create Ingress record (should used with ServiceType: ClusterIP)
+  # nodePort: 32000
+  healthProbes: true
+  probes:
+    startupProbe:
+      httpGet:
+        path: '{{ default "" .Values.controller.jenkinsUriPrefix }}/login'
+        port: http
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 12
+    livenessProbe:
+      failureThreshold: 5
+      httpGet:
+        path: '{{ default "" .Values.controller.jenkinsUriPrefix }}/login'
+        port: http
+      periodSeconds: 10
+      timeoutSeconds: 5
+      # initialDelaySeconds: 60
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: '{{ default "" .Values.controller.jenkinsUriPrefix }}/login'
+        port: http
+      periodSeconds: 10
+      timeoutSeconds: 5
+      # initialDelaySeconds: 60
+
+  agentListenerEnabled: true
+  agentListenerPort: 50000
+  agentListenerHostPort:
+  agentListenerNodePort:
+  disabledAgentProtocols:
+    - JNLP-connect
+    - JNLP2-connect
+  csrf:
+    defaultCrumbIssuer:
+      enabled: true
+      proxyCompatability: true
+  agentListenerServiceType: "ClusterIP"
+  # Optionally assign an IP to the LoadBalancer agentListenerService LoadBalancer
+  # GKE users: only regional static IPs will work for Service Load balancer.
+  agentListenerLoadBalancerIP:
+  agentListenerServiceAnnotations: {}
+  loadBalancerSourceRanges:
+  - 0.0.0.0/0
+  # Optionally assign a known public LB IP
+  # loadBalancerIP: 1.2.3.4
+  # javaOpts: >
+  #   -Dcom.sun.management.jmxremote.port=4000
+  #   -Dcom.sun.management.jmxremote.authenticate=false
+  #   -Dcom.sun.management.jmxremote.ssl=false
+  # jmxPort: 4000
+  # Optionally configure other ports to expose in the controller container
+  extraPorts: []
+  # - name: BuildInfoProxy
+  #   port: 9000
+
+  # List of plugins to be install during Jenkins controller start
+  installPlugins:
+    - kubernetes:latest
+    - workflow-aggregator:latest
+    - git:latest
+    - configuration-as-code:latest
+    - blueocean:latest
+    - job-dsl:latest
+
+  installLatestPlugins: true
+  installLatestSpecifiedPlugins: false
+  additionalPlugins:
+    - hashicorp-vault-plugin:latest
+    - theme-manager:latest
+    - material-theme:latest
+    - simple-theme-plugin:latest
+
+  initializeOnce: false
+  # overwritePlugins: true
+  overwritePluginsFromImage: true
+
+  enableRawHtmlMarkupFormatter: false
+  scriptApproval: []
+  cloudName: "kubernetes"
+
+  # Below is the implementation of Jenkins Configuration as Code.  Add a key under configScripts for each configuration area,
+  # where each corresponds to a plugin or section of the UI.  Each key (prior to | character) is just a label, and can be any value.
+  # Keys are only used to give the section a meaningful name.  The only restriction is they may only contain RFC 1123 \ DNS label
+  # characters: lowercase letters, numbers, and hyphens.  The keys become the name of a configuration yaml file on the controller in
+  # /var/jenkins_home/casc_configs (by default) and will be processed by the Configuration as Code Plugin.  The lines after each |
+  # become the content of the configuration yaml file.  The first line after this is a JCasC root element, eg jenkins, credentials,
+  # etc.  Best reference is https://<jenkins_url>/configuration-as-code/reference.  The example below creates a welcome message:
+  JCasC:
+    defaultConfig: true
+    configScripts:
+      master-config: |
+        credentials:
+          system:
+            domainCredentials:
+            - credentials:
+              - vaultTokenCredential:
+                  description: "Vault Token Credential"
+                  id: "demovault"
+                  scope: GLOBAL
+                  token: "{bvbvbvbvbvbvbvbvbv}"
+              - vaultUsernamePasswordCredentialImpl:
+                  engineVersion: 2
+                  id: "github_vault"
+                  namespace: "admin"
+                  passwordKey: "gh_token"
+                  path: "kv/github"
+                  scope: GLOBAL
+                  usernameKey: "gh_user"
+              - vaultKubernetesCredential:
+                  id: "k8s-vaultdemo"
+                  namespace: "root"
+                  role: "jenkins"
+                  scope: GLOBAL
+        tool:
+          git:
+            installations:
+            - home: "git"
+              name: "Default"
+        unclassified:
+          hashicorpVault:
+            configuration:
+              engineVersion: 2
+              timeout: 60
+              vaultCredentialId: "hcp-vault"
+              vaultUrl: "https://vault.vault:8200"
+          themeManager:
+            disableUserThemes: false
+            theme: "material-indigo"
+      list-jobs: |-
+        jobs:
+          - script: >
+              folder('HashiCorp')
+          - script: >
+              multibranchPipelineJob('HashiCorp/vault-tfe-pipeline') {
+                branchSources {
+                  github {
+                    id('123456789')
+                    scanCredentialsId('github_vault')
+                    repoOwner('dcanadillas')
+                    repository('cicd-pipelines')
+                  }
+                }
+              }
+    securityRealm: |-
+      local:
+        allowsSignup: false
+        enableCaptcha: false
+        users:
+          - id: "${chart-admin-username}"
+            name: "Jenkins Admin"
+            password: "${chart-admin-password}"
+    # Ignored if authorizationStrategy is defined in controller.JCasC.configScripts
+    authorizationStrategy: |-
+      loggedInUsersCanDoAnything:
+        allowAnonymousRead: false
