@@ -23,7 +23,7 @@ The script is going to ask if you are using the righ K8s context. Press any key 
 > NOTE:
 > *If you want to install every included CI/CD engine (Tekton Pipelines by now):*
 > ```bash
-> make install all
+> make install
 > ```
 
 Change the values of the static secrets to be used in Vault in the file `install/config/secrets.json`:
@@ -45,7 +45,9 @@ Configure Vault with the required secrets and Kubernetes auth:
 make configure TFEORG=<your_TFC_organization> TFEUSER=<your_TFC_user>
 ```
 
-## Try Jenkins pipelines integration
+## Jenkins pipelines integration
+
+This repo has some Jenkins pipelines examples with Vault integration in the `jenkins` folder. Jenkins deployment with JCasC of this repo configures already a multibranch pipeline using the pipeline as code in `jenkins/Jenkinsfile.valt-tf-vars`.
 
 Jenkins is installed in the `jenkins` namespace:
 
@@ -53,7 +55,7 @@ Jenkins is installed in the `jenkins` namespace:
 kubectl get all -n jenkins
 ```
 
-The password for the `admin` account is in `jenkins-admin` secret:
+The password for the `admin` account is in `jenkins-admin` K8s secret:
 
 ```bash
 kubectl get secret -n jenkins jenkins-admin -o go-template='{{ index .data "jenkins-admin-password" }}' | base64 -d
@@ -68,5 +70,19 @@ Then you should be able to access Jenkins at [http://localhost:9090](http://loca
 
 You should have a pipeline already configure in [http://localhost:9090/job/HashiCorp/job/vault-tfe-pipeline/](http://localhost:9090/job/HashiCorp/job/vault-tfe-pipeline/)
 
+## Tekton pipelines example
+
+This repo has also a [Tekton pipelines](https://tekton.dev/) example using HashiCorp Vault integration. Use [this other repo](https://github.com/dcanadillas/tekton-vault) for a complete explained example of the integration with Tekton and Vault.
 
 
+You can install Tekton in your K8s cluster from this repo (from the `install` folder):
+
+```bash
+make tekton
+```
+
+Then you can deploy the Tekton pipelines by applying them in your `default` namespace (you can do in other namespaces, but then you need to change the Kubernetes Auth role in Vault to give permissions to that namespace):
+
+```bash
+kubectl apply -f ./tekton -n default
+```

@@ -83,24 +83,24 @@ EOF
 kubectl exec vault-0 -n $VAULT_KNS -- vault auth enable kubernetes
 
 kubectl exec vault-0 -n $VAULT_KNS -- vault write auth/kubernetes/config \
-        token_reviewer_jwt="$SA_JWT_TOKEN" \
-        kubernetes_host="https://$K8S_HOST:$K8S_PORT" \
-        kubernetes_ca_cert="$SA_CA_CRT"
-        #issuer="https://kubernetes.default.svc.cluster.local"
+  token_reviewer_jwt="$SA_JWT_TOKEN" \
+  kubernetes_host="https://$K8S_HOST:$K8S_PORT" \
+  kubernetes_ca_cert="$SA_CA_CRT"
+  #issuer="https://kubernetes.default.svc.cluster.local"
 
 kubectl exec vault-0 -n $VAULT_KNS -- vault write auth/kubernetes/role/jenkins \
-    bound_service_account_names="jenkins","default"\
-    bound_service_account_namespaces="jenkins","default" \
-    policies="jenkins" \
-    token_no_default_policy=false \
-    token_ttl="1m"
+  bound_service_account_names="jenkins","default"\
+  bound_service_account_namespaces="jenkins","default" \
+  policies="jenkins" \
+  token_no_default_policy=false \
+  token_ttl="1m"
 
 kubectl exec vault-0 -n $VAULT_KNS -- vault write auth/kubernetes/role/tekton \
-    bound_service_account_names="tekton-sa","default"\
-    bound_service_account_namespaces="tekton-pipelines","default" \
-    policies="tektonpol" \
-    token_no_default_policy=false \
-    token_ttl="1m"
+  bound_service_account_names="tekton-sa","default"\
+  bound_service_account_namespaces="tekton-pipelines","default" \
+  policies="tektonpol" \
+  token_no_default_policy=false \
+  token_ttl="1m"
 
 
 kubectl exec vault-0 -n $VAULT_KNS -- vault secrets enable terraform
