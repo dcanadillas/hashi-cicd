@@ -22,7 +22,7 @@ controller:
   # If you don't need that user or use a different security realm then you can disable it
   adminSecret: true
   hostNetworking: false
-  adminUser: "dcanadillas"
+  adminUser: "admin"
   # adminPassword: <defaults to random>
   admin:
     existingSecret: "jenkins-admin"
@@ -112,9 +112,9 @@ controller:
   installLatestSpecifiedPlugins: false
   additionalPlugins:
     - hashicorp-vault-plugin:latest
-    - theme-manager:latest
-    - material-theme:latest
-    - simple-theme-plugin:latest
+    # - theme-manager:latest
+    # - material-theme:latest
+    # - simple-theme-plugin:latest
 
   initializeOnce: false
   # overwritePlugins: true
@@ -169,9 +169,6 @@ controller:
               timeout: 60
               vaultCredentialId: "k8s-vaultdemo"
               vaultUrl: "http://vault.vault:8200"
-          themeManager:
-            disableUserThemes: false
-            theme: "default"
       list-jobs: |-
         jobs:
           - script: >
