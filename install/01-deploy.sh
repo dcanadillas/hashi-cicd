@@ -3,7 +3,7 @@ export VAULT_KNS="vault"
 export TKNS="tektoncd"
 
 if [ -f "$HOME/.terraform.d/credentials.tfrc.json" ];then
-    export TOKEN="$(cat $HOME/.terraform.d/credentials.tfrc.json | awk -F': ' '/token/ {print $NF}' | tr -d "\"")"
+    export TOKEN="$(cat $HOME/.terraform.d/credentials.tfrc.json | jq ".credentials.\"app.terraform.io\".token" | tr -d '"')"
 else
     echo -e "\nTerraform credentials not found. Consider doing \"terraform login\" next time...\n"
     read -s -p "Insert your Terraform Cloud user API Token: " TOKEN

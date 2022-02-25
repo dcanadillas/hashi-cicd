@@ -2,7 +2,7 @@ PLATFORM="x86_64"
 OS="linux"
 
 define usage
-	@echo "Usage: make [all|install|configure|run|clean] [TFEORG=<TFC_ORG> [TFEUSER=<YOUR_TFC_USER>] [TFEWORK=<YOUR_TFC_WORKSPACE>]]"
+	@echo "Usage: make [all|install|configure|tkrun|clean] [TFEORG=<TFC_ORG> [TFEUSER=<YOUR_TFC_USER>]]"
 endef
 
 
