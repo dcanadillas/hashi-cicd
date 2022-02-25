@@ -41,10 +41,10 @@ kubectl apply -f ./config
 #kubectl create sa tekton -n $TKNS
 
 # Configuring Vault
-export VAULT_SA_NAME="$(kubectl get sa vault-auth -n default \
+export VAULT_SA_NAME="$(kubectl get sa vault -n $VAULT_KNS \
     --output go-template='{{ range .secrets }}{{ .name }}{{ end }}')"
 
-export SA_JWT_TOKEN="$(kubectl get secret $VAULT_SA_NAME -n default \
+export SA_JWT_TOKEN="$(kubectl get secret $VAULT_SA_NAME -n $VAULT_KNS \
     --output 'go-template={{ .data.token }}' | base64 --decode)"
 
 export SA_CA_CRT=$(kubectl get secret $VAULT_SA_NAME \
