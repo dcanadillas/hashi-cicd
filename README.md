@@ -31,12 +31,16 @@ Change the values of the static secrets to be used in Vault in the file `install
 {
   "<tfc_var1>": "<value_to_be_set>",
   "<tfc_var2>": "<value_to_be_set>",
+  "..." : "...",
+  "<tfc_varn>": "<value_to_be_set>",
   "tfe_org": "<your_tfc_org>",
   "tfe_token": "<static_example_tfe_token>",
   "gh_user": "<gh_token>",
   "gh_token": "<gh_token> "
 }
 ```
+
+`<tfc_var1> ... <tfc_varn>` are **existing variable keys in your Terraform Cloud Workspace**
 
 
 Configure Vault with the required secrets and Kubernetes auth:
@@ -48,6 +52,9 @@ make configure TFEORG=<your_TFC_organization> TFEUSER=<your_TFC_user>
 ## Jenkins pipelines integration
 
 This repo has some Jenkins pipelines examples with Vault integration in the `jenkins` folder. Jenkins deployment with JCasC of this repo configures already a multibranch pipeline using the pipeline as code in `jenkins/Jenkinsfile.valt-tf-vars`.
+
+> NOTE: First build failure
+> The first automatic build of the pipelines may fail because of the non-existing previous parameters in Jenkins configuration. Then you need to do a new build of the multi-branch pipelines to successfuly run them with your parameters values.
 
 Jenkins is installed in the `jenkins` namespace:
 
