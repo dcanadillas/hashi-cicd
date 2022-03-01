@@ -48,6 +48,7 @@ pipeline {
         ]) {
           container('curl') {
             sh """
+              cd /home/jenkins/agent/workspace/HashiCorp_Hashi-CICD_master
               ./updatevars.sh ${params.vaultpath} ${params.tfe_wkspc_id} 
             """
           }
