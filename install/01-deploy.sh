@@ -36,7 +36,7 @@ echo -e "\nTerraform Cloud Team ID for Owners at organization $1: $TEAMID"
 echo -e "\nTerraform Cloud User ID for user $2: $TFUSERID\n"
 
 # Deploy Vault SA for JWT Token Review, Tekton pipelines service account and Vault Agent ConfigMap
-kubectl apply -f ./config
+kubectl apply -f ./config/jenkins-admin-secret.yaml
 
 #kubectl create sa tekton -n $TKNS
 
