@@ -27,7 +27,7 @@ while read -r line;do
   export VARVALUE="$(./jq-linux64 -r ".\"$line\"" tfevalues.json)"
   echo "This is the var ID: $VARID"
   cat - <<EOF > varpayload.json
-{"data": {"attributes": {"key": \"$line\","value": \"$VARVALUE\","hcl": false, "sensitive": false},"type":"vars","id":\"$VARID\"}}
+{"data": {"attributes": {"key": "${line}","value": "${VARVALUE}","hcl": false, "sensitive": false},"type":"vars","id":"${VARID}"}}
 EOF
   ./jq-linux64 -r . varpayload.json
   curl -H "Authorization: Bearer $TFE_TOKEN" -H "Content-Type: application/vnd.api+json" -X PATCH -d @varpayload.json "https://app.terraform.io/api/v2/workspaces/${WORKSPACE}/vars/\$VARID"
