@@ -66,6 +66,9 @@ path "kv/cicd" {
 path "kv/data/cicd" { 
   capabilities = ["read", "update", "list"] 
 }
+path "kv/data/tfevalues" { 
+  capabilities = ["read", "update", "list"] 
+}
 path "terraform/creds/tfe-role" { 
   capabilities = ["read", "update", "list"] 
 }
@@ -110,6 +113,7 @@ kubectl exec vault-0 -n $VAULT_KNS -- vault write terraform/role/tfe-role user_i
 
 kubectl exec vault-0 -n $VAULT_KNS -- vault secrets enable -version 2 kv
 cat config/secrets.json | kubectl exec vault-0 -n $VAULT_KNS -ti -- vault kv put kv/cicd -
+cat config/tfe_values.json | kubectl exec vault-0 -n $VAULT_KNS -ti -- vault kv put kv/tfevalues -
 
 
 
