@@ -30,5 +30,5 @@ while read -r line;do
 {"data": {"attributes": {"key": "${line}","value": "${VARVALUE}","hcl": false, "sensitive": false},"type":"vars","id":"${VARID}"}}
 EOF
   ./jq-linux64 -r . varpayload.json
-  curl -H "Authorization: Bearer $TFE_TOKEN" -H "Content-Type: application/vnd.api+json" -X PATCH -d @varpayload.json "https://app.terraform.io/api/v2/workspaces/${WORKSPACE}/vars/\$VARID"
+  curl -H "Authorization: Bearer $TFE_TOKEN" -H "Content-Type: application/vnd.api+json" -X PATCH -d @varpayload.json "https://app.terraform.io/api/v2/workspaces/${WORKSPACE}/vars/${VARID}"
 done < tfekeys.txt 
