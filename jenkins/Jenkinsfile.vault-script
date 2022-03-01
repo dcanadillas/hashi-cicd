@@ -50,7 +50,7 @@ pipeline {
             sh """
               cd /home/jenkins/agent/workspace/HashiCorp_Hashi-CICD_master
               ls
-              ./jenkins/updatevars.sh ${params.vaultpath} ${params.tfe_wkspc_id} 
+              ./jenkins/updatevars.sh ${params.vaultpath} ${params.tfepath} ${params.tfe_wkspc_id} 
             """
           }
         }
