@@ -22,7 +22,7 @@ pipeline {
   parameters {
     //string(name: 'vaulturl', defaultValue: 'http://host.docker.internal:8200', description: 'Vault API URL')
     string(name: 'vaulturl', defaultValue: 'http://vault.vault.svc.cluster.local:8200', description: 'Vault API URL')
-    string(name: 'vaultpath', defaultValue: 'kv/cicd', description: 'Secrets path for Vault static secrets')
+    string(name: 'vaultpath', defaultValue: 'kv/tfevalues', description: 'Secrets path for Vault static secrets')
     string(name: 'tfepath', defaultValue: 'terraform/creds/tfe-role', description: 'Secrets path for Terraform secrets')
     string(name: 'vaultns', defaultValue: 'root', description: 'Vault Namespace')
     string(name: 'vaultcreds', defaultValue: 'k8s-vaultdemo', description: 'Vault credentials')
