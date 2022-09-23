@@ -72,7 +72,7 @@ EOF
         withVault(configuration: [failIfNotFound: true, timeout: 10, vaultCredentialId: "${params.vaultcreds}", vaultUrl: "${params.vaulturl}"],
         vaultSecrets: [
           [
-            path: "${params.vaultpath}", 
+            path: "kv/cicd", 
             secretValues: [
               [envVar: 'tfe_org', vaultKey: 'tfe_org']
             ]
