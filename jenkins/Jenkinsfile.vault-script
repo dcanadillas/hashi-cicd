@@ -48,8 +48,8 @@ pipeline {
         ]) {
           container('curl') {
             sh """
-              ls \$(printenv PWD)
-              \$(printenv PWD)/jenkins/updatevars.sh ${params.vaultpath} ${params.tfepath} ${params.tfe_wkspc_id} 
+              ls ${WORKSPACE}
+              ${WORKSPACE}/jenkins/updatevars.sh ${params.vaultpath} ${params.tfepath} ${params.tfe_wkspc_id} 
             """
           }
         }
