@@ -11,7 +11,7 @@ pipeline {
           configuration: [
             failIfNotFound: true, 
             timeout: 10, 
-            vaultCredentialId: 'kubernetes', 
+            vaultCredentialId: 'k8s-vaultdemo', 
             vaultUrl: "${params.vaulturl}"
           ], 
           vaultSecrets: [

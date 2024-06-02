@@ -178,6 +178,108 @@ controller:
           - script: >
               folder('HashiCorp')
           - script: >
+              multibranchPipelineJob('HashiCorp/vault-tfe-pipeline') {
+                factory {
+                  workflowBranchProjectFactory {
+                    scriptPath('jenkins/Jenkinsfile.vault-tf-vars')
+                  }
+                }
+                branchSources {
+                  branchSource {
+                    source {
+                      github {
+                        id('github-12')
+                        repoOwner('dcanadillas')
+                        repository('hashi-cicd')
+                        repositoryUrl('https://github.com/dcanadillas/hashi-cicd')
+                        configuredByUrl(false)
+                        credentialsId(null)
+                        traits {
+                          gitHubBranchDiscovery {
+                            strategyId(3)
+                          }
+                        }
+                      }
+                    }
+                    buildStrategies {
+                      buildAllBranches {
+                        strategies {
+                          skipInitialBuildOnFirstBranchIndexing()
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+          - script: >
+              multibranchPipelineJob('HashiCorp/vault-no-plugin') {
+                factory {
+                  workflowBranchProjectFactory {
+                    scriptPath('jenkins/Jenkinsfile.vaultnoplugin')
+                  }
+                }
+                branchSources {
+                  branchSource {
+                    source {
+                      github {
+                        id('github-12')
+                        repoOwner('dcanadillas')
+                        repository('hashi-cicd')
+                        repositoryUrl('https://github.com/dcanadillas/hashi-cicd')
+                        configuredByUrl(false)
+                        credentialsId(null)
+                        traits {
+                          gitHubBranchDiscovery {
+                            strategyId(3)
+                          }
+                        }
+                      }
+                    }
+                    buildStrategies {
+                      buildAllBranches {
+                        strategies {
+                          skipInitialBuildOnFirstBranchIndexing()
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+          - script: >
+              multibranchPipelineJob('HashiCorp/vault-binding') {
+                factory {
+                  workflowBranchProjectFactory {
+                    scriptPath('jenkins/Jenkinsfile.vault-script')
+                  }
+                }
+                branchSources {
+                  branchSource {
+                    source {
+                      github {
+                        id('github-12')
+                        repoOwner('dcanadillas')
+                        repository('hashi-cicd')
+                        repositoryUrl('https://github.com/dcanadillas/hashi-cicd')
+                        configuredByUrl(false)
+                        credentialsId(null)
+                        traits {
+                          gitHubBranchDiscovery {
+                            strategyId(3)
+                          }
+                        }
+                      }
+                    }
+                    buildStrategies {
+                      buildAllBranches {
+                        strategies {
+                          skipInitialBuildOnFirstBranchIndexing()
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+          - script: >
               pipelineJob('HashiCorp/vault-tfe-test') {
                 definition {
                   cpsScm {
@@ -191,47 +293,6 @@ controller:
                       }
                     }
                     scriptPath('jenkins/Jenkinsfile.vault-tf-vars')
-                  }
-                }
-              }
-          - script: >
-              pipelineJob('HashiCorp/vault-noplugin-test') {
-                definition {
-                  cpsScm {
-                    scm {
-                      git { 
-                        remote {
-                          credentials(null)
-                          url('https://github.com/dcanadillas/hashi-cicd.git')
-                        }
-                        branch('master')
-                      }
-                    }
-                    scriptPath('jenkins/Jenkinsfile.vaultnoplugin')
-                  }
-                }
-              }
-          - script: >
-<<<<<<< HEAD
-              multibranchPipelineJob('HashiCorp/vault-binding') {
-                factory {
-                  workflowBranchProjectFactory {
-                    scriptPath('jenkins/Jenkinsfile.vault-script-new')
-=======
-              pipelineJob('HashiCorp/vault-script-test') {
-                definition {
-                  cpsScm {
-                    scm {
-                      git { 
-                        remote {
-                          credentials(null)
-                          url('https://github.com/dcanadillas/hashi-cicd.git')
-                        }
-                        branch('master')
-                      }
-                    }
-                    scriptPath('jenkins/Jenkinsfile.vault-script')
->>>>>>> origin/master
                   }
                 }
               }

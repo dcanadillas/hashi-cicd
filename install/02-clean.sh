@@ -16,7 +16,7 @@ else
 fi 
 
 # Removing configs created
-kubectl delete -f ./config
+kubectl delete -f ./config/*.yaml
 
 # Uninstalling Vault
 helm uninstall vault -n $VAULT_KNS 
@@ -31,5 +31,5 @@ helm uninstall jenkins -n $JENKINS_KNS
 kubectl delete pvc -n $JENKINS_KNS --all
 
 # Deleting namespaces
-kubectl delete ns  $VAULT_KNS $JENKINS_KNS
+kubectl delete ns  $VAULT_KNS $JENKINS_KNS $TEKTON_KNS
 
