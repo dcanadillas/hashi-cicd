@@ -23,11 +23,7 @@ pipeline {
   parameters {
     booleanParam defaultValue: true, description: 'Check to update vars', name: 'UPDATE_VARS'
     string(name: 'vaulturl', defaultValue: 'http://vault.vault.svc.cluster.local:8200', description: 'Vault API URL')
-<<<<<<< HEAD
-    string(name: 'vaultpath', defaultValue: 'kv/tfevalues', description: 'Secrets path for Vault static secrets')
-=======
     string(name: 'vaultpath', defaultValue: 'kv/data/tfevalues', description: 'Secrets path for Vault static secrets')
->>>>>>> origin/master
     string(name: 'tfepath', defaultValue: 'terraform/creds/tfe-role', description: 'Secrets path for Terraform secrets')
     string(name: 'vaultns', defaultValue: 'root', description: 'Vault Namespace')
     string(name: 'vaultcreds', defaultValue: 'k8s-vaultdemo', description: 'Vault credentials')
@@ -52,14 +48,8 @@ pipeline {
         ]) {
           container('curl') {
             sh """
-<<<<<<< HEAD
-              cd ${WORKSPACE}
-              ls
-              ./jenkins/updatevars.sh ${params.vaultpath} ${params.tfepath} ${params.tfe_wkspc_id} 
-=======
               ls ${WORKSPACE}
               ${WORKSPACE}/jenkins/updatevars.sh ${params.vaultpath} ${params.tfepath} ${params.tfe_wkspc_id} 
->>>>>>> origin/master
             """
           }
         }
