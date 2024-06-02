@@ -57,7 +57,7 @@ pipeline {
     }
     stage ('Terraform') {
       steps {
-        withVault(configuration: [failIfNotFound: true, timeout: 10, vaultCredentialId: "${params.vaultcreds}", vaultUrl: "${params.vaulturl}"],
+        withVault(configuration: [failIfNotFound: true, timeout: 10, vaultCredentialId: "${params.vaultcreds}", vaultUrl: "${params.vaulturl}", skipSslVerification: "true"],
         vaultSecrets: [
           [
             path: "${params.vaultpath}", 
