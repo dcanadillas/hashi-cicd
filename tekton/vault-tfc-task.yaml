@@ -43,6 +43,8 @@ spec:
       image: gcr.io/cloud-builders/curl
       script: |
         #!/usr/bin/env bash
+        sleep 10
+        ls /vault/secrets
         echo -e "Saving the Workspace ID in a file... \n"
         TFE_TOKEN="$(cat /vault/secrets/credentials.tfrc.json | awk -F': ' '/token/ {print $NF}' | tr -d "\"")"
         curl -s -H "Authorization: Bearer $TFE_TOKEN" \

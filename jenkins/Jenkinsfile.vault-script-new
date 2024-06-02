@@ -1,4 +1,3 @@
-
 pipeline {
   agent {
     kubernetes {
@@ -21,7 +20,7 @@ pipeline {
     }
   }
   parameters {
-    booleanParam defaultValue: true, description: 'Check to update vars', name: 'UPDATE_VARS'
+    booleanParam defaultValue: false, description: 'Check to update vars', name: 'UPDATE_VARS'
     string(name: 'vaulturl', defaultValue: 'http://vault.vault.svc.cluster.local:8200', description: 'Vault API URL')
     string(name: 'vaultpath', defaultValue: 'kv/tfevalues', description: 'Secrets path for Vault static secrets')
     string(name: 'tfepath', defaultValue: 'terraform/creds/tfe-role', description: 'Secrets path for Terraform secrets')
@@ -48,6 +47,7 @@ pipeline {
         ]) {
           container('curl') {
             sh """
+              # cd /home/jenkins/agent/workspace/HashiCorp_Hashi-CICD_master
               cd ${WORKSPACE}
               ls
               ./jenkins/updatevars.sh ${params.vaultpath} ${params.tfepath} ${params.tfe_wkspc_id} 

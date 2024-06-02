@@ -209,7 +209,7 @@ controller:
               multibranchPipelineJob('HashiCorp/vault-binding') {
                 factory {
                   workflowBranchProjectFactory {
-                    scriptPath('jenkins/Jenkinsfile.vault-script')
+                    scriptPath('jenkins/Jenkinsfile.vault-script-new')
                   }
                 }
                 branchSources {
